@@ -1,47 +1,50 @@
-create table if not exists Artists (
-	id SERIAL primary key,
-	name VARCHAR(60) unique not null
+CREATE TABLE IF NOT EXISTS Artists (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(60) UNIQUE NOT NULL
 );
 
-create table if not exists Genres (
-	id SERIAL primary key,
-	name VARCHAR(40) unique not null
+CREATE TABLE IF NOT EXISTS Genres (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(40) UNIQUE NOT NULL
 );
 
-create table if not exists ArtistGenres (
-	artist_id INTEGER references Artist(id),
-	genre_id INTEGER references Genres(id),
-	constraint pk primary key (artist_id, genre_id)
-);
-
-create table if not exists Albums (
-	id SERIAL primary key,
+CREATE TABLE IF NOT EXISTS Albums (
+	id SERIAL PRIMARY KEY,
 	name VARCHAR(60),
-	year YEAR,
+	year INTEGER NOT NULL,
+		CHECK (YEAR > 1900 AND YEAR < 2022)
 );
 
-create table if not exists Tracks (
-	id SERIAL primary key,
+CREATE TABLE IF NOT EXISTS Tracks (
+	id SERIAL PRIMARY KEY,
 	name VARCHAR(80),
 	duration TIME,
-	album_id INTEGER references Albums(id)
+	album_id INTEGER REFERENCES Albums(id)
 );
 
-create table if not exists Collections (
-	id SERIAL primary key,
+CREATE TABLE IF NOT EXISTS Collections (
+	id SERIAL PRIMARY KEY,
 	name VARCHAR(80),
-	year year,
+	year INTEGER NOT NULL,
+		CHECK (YEAR > 1900 AND YEAR < 2022)
 );
 
-create table if not exists AtistsAlbums (
-	artist_id INTEGER references Artist(id),
-	album_id INTEGER references Albums(id),
-	constraint pk primary key (artist_id, album_id)
+CREATE TABLE IF NOT EXISTS AtistsAlbums (
+	artist_id INTEGER REFERENCES Artists(id),
+	album_id INTEGER REFERENCES Albums(id),
+	CONSTRAINT pk_artistsalbums PRIMARY KEY (artist_id,
+album_id)
 );
 
-create table if not exists TracksCollections (
-	track_id INTEGER references Tracks(id),
-	collection_id INTEGER references Collections(id),
-	constraints pk primary key (track_id, collection_id)
+CREATE TABLE IF NOT EXISTS TracksCollections (
+	track_id INTEGER REFERENCES Tracks(id),
+	collection_id INTEGER REFERENCES Collections(id),
+	CONSTRAINT pk_trackscollections PRIMARY KEY (track_id,
+	collection_id)
 );
-	
+
+CREATE TABLE IF NOT EXISTS ArtistGenres (
+	artist_id INTEGER REFERENCES Artists(id),
+	genre_id INTEGER REFERENCES Genres(id),
+	CONSTRAINT pk_artistgenres PRIMARY KEY (artist_id, genre_id)
+);
